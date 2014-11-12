@@ -5,11 +5,41 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>edu.rpi.tw.rds</groupId>
+    <parent>
+        <groupId>edu.rpi.tw.rds</groupId>
+        <artifactId>rds-api-all</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
     <artifactId>rds-api-webapp</artifactId>
-    <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>RDS-API Webapp</name>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>edu.rpi.tw.rds</groupId>
+            <artifactId>rds-api-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>edu.rpi.tw.rds</groupId>
+            <artifactId>rds-api-ckan</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>edu.rpi.tw.rds</groupId>
+            <artifactId>rds-api-vivo</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <finalName>rds-api</finalName>
+    </build>
 
 </project>

@@ -5,9 +5,13 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>edu.rpi.tw.rds</groupId>
+    <parent>
+        <groupId>edu.rpi.tw.rds</groupId>
+        <artifactId>rds-api-all</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
     <artifactId>rds-api-ckan</artifactId>
-    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>RDS-API CKAN Integration Module</name>
