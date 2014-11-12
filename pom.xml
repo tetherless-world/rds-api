@@ -6,9 +6,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>edu.rpi.tw.rds</groupId>
-    <artifactId>rds-all</artifactId>
+    <artifactId>rds-api-all</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
+
+    <name>RDS-API</name>
+    <description>A parent package containing rds-api-core, rds-api-ckan, rds-api-vivo, and rds-api-webapp</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
