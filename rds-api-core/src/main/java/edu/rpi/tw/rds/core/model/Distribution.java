@@ -1,12 +1,12 @@
 package edu.rpi.tw.rds.core.model;
 
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.LocalDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.LocalDate;
 
 /**
  * @author szednik

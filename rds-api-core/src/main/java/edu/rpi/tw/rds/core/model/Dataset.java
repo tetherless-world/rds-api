@@ -1,6 +1,7 @@
 package edu.rpi.tw.rds.core.model;
 
 import edu.rpi.tw.rds.core.mongo.CascadeSave;
+import org.joda.time.LocalDate;
 import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -23,6 +24,12 @@ public class Dataset extends AbstractResource {
 
     @Field("landingPage")
     private String landingPage;
+
+    @Field("issued")
+    private LocalDate issuedDate;
+
+    @Field("modified")
+    private LocalDate modifiedDate;
 
     @DBRef
     @CascadeSave
@@ -62,6 +69,22 @@ public class Dataset extends AbstractResource {
 
     public void setLandingPage(String landingPage) {
         this.landingPage = landingPage;
+    }
+
+    public LocalDate getIssuedDate() {
+        return issuedDate;
+    }
+
+    public void setIssuedDate(LocalDate issuedDate) {
+        this.issuedDate = issuedDate;
+    }
+
+    public LocalDate getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(LocalDate modifiedDate) {
+        this.modifiedDate = modifiedDate;
     }
 
     public Person getAuthor() {
