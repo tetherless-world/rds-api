@@ -2,11 +2,16 @@ package edu.rpi.tw.rds.ckan.service;
 
 import edu.rpi.tw.rds.ckan.model.Dataset;
 import edu.rpi.tw.rds.ckan.model.Resource;
+import edu.rpi.tw.rds.ckan.util.CkanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.ws.client.core.WebServiceTemplate;
+import org.springframework.util.Assert;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * @author szednik
@@ -14,42 +19,50 @@ import org.springframework.ws.client.core.WebServiceTemplate;
 @Service
 public class DatasetService {
 
+    @Value("#{ckanProperties.base_url}")
+    private String CKAN_BASE_URL;
+
     @Value("#{ckanProperties.api_key}")
     private String CKAN_API_KEY;
 
     @Autowired
-    @Qualifier("datasetWebServiceTemplate")
-    private WebServiceTemplate datasetWebServiceTemplate;
+    private RestTemplate restTemplate;
 
     @Autowired
     private ResourceService resourceService;
 
     public Dataset register(Dataset dataset) {
 
-        System.out.println(datasetWebServiceTemplate.getDefaultUri());
+        Assert.notNull(dataset, "dataset must not be null");
+        Assert.hasText(dataset.getName(), "dataset name must have a value");
+        Assert.hasText(dataset.getTitle(), "dataset title must have a value");
 
-        // TODO create Source from dataset
+        final String CREATE_DATASET_URL = CKAN_BASE_URL + "/api/rest/dataset";
 
-        //webServiceTemplate.sendSourceAndReceiveToResult(source, result);
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+        requestHeaders.set("Authorization", CKAN_API_KEY);
 
-        final String datasetId = "";
+        HttpEntity<Dataset> requestEntity = new HttpEntity<>(dataset, requestHeaders);
 
-        dataset.setId("");
-        dataset.setCkanURL("");
+        ResponseEntity<Dataset> responseEntity = restTemplate.postForEntity(CREATE_DATASET_URL, requestEntity, Dataset.class);
+        Assert.notNull(responseEntity, "response entity from rest template must not be null");
 
-        for(Resource resource : dataset.getResources()) {
-            resource.setDatasetId(datasetId);
-            resource = resourceService.register(resource);
+        if(responseEntity.getStatusCode().value() != 201) {
+            // throw Exception?
+            return dataset;
         }
 
-        return dataset;
-    }
+        Dataset response = responseEntity.getBody();
 
-    public WebServiceTemplate getDatasetWebServiceTemplate() {
-        return datasetWebServiceTemplate;
-    }
+        Assert.notNull(response.getId(), "dataset id should not be null");
+        Assert.notNull(response.getCkanURL(), "dataset CKAN_URL should not be null");
 
-    public void setDatasetWebServiceTemplate(WebServiceTemplate datasetWebServiceTemplate) {
-        this.datasetWebServiceTemplate = datasetWebServiceTemplate;
+        for(Resource resource : dataset.getResources()) {
+            resource.setDatasetId(response.getId());
+            response.addResource(resourceService.register(resource));
+        }
+
+        return response;
     }
 }

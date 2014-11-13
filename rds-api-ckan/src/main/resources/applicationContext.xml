@@ -10,24 +10,14 @@
 
        <util:properties id="ckanProperties" location="classpath:/ckan.properties"/>
 
-       <bean id="datasetWebServiceTemplate" class="org.springframework.ws.client.core.WebServiceTemplate">
-              <property name="defaultUri" value="#{ckanProperties.base_url}/api/rest/dataset"/>
-              <property name="interceptors">
+       <!-- Marshaller -->
+
+       <bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+              <property name="messageConverters">
                      <list>
-                            <bean class="edu.rpi.tw.rds.ckan.ws.ckan_rest_api.UpdateHeaderIntercepter"/>
+                            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
                      </list>
               </property>
        </bean>
-
-       <bean id="createResourceWebServiceTemplate" class="org.springframework.ws.client.core.WebServiceTemplate">
-              <property name="defaultUri" value="#{ckanProperties.base_url}/api/3/action/resource_create"/>
-              <property name="interceptors">
-                     <list>
-                            <bean class="edu.rpi.tw.rds.ckan.ws.ckan_v3_api.UpdateHeaderIntercepter"/>
-                     </list>
-              </property>
-       </bean>
-
-       <!-- configure headers with API-KEY ? -->
 
 </beans>

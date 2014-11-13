@@ -45,6 +45,15 @@ public class Dataset extends CkanBase {
 
     // methods
 
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public String getDownloadURL() {
         return downloadURL;
     }
@@ -123,5 +132,9 @@ public class Dataset extends CkanBase {
 
     public void setResources(List<Resource> resources) {
         this.resources = resources;
+    }
+
+    public void addResource(Resource resource) {
+        this.resources.add(resource);
     }
 }

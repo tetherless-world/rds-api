@@ -1,5 +1,6 @@
 package edu.rpi.tw.rds.ckan.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -9,6 +10,9 @@ public abstract class CkanBase {
 
     @JsonProperty("id")
     protected String id;
+
+    @JsonIgnore
+    protected String identifier;
 
     @JsonProperty("name")
     protected String name;
@@ -27,6 +31,14 @@ public abstract class CkanBase {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 
     public String getName() {
