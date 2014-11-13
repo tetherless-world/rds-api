@@ -21,9 +21,16 @@
         <spring.ws.version>2.1.4.RELEASE</spring.ws.version>
         <jackson.version>2.4.1</jackson.version>
         <joda.version>2.3</joda.version>
+        <jena.version>2.12.0</jena.version>
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>edu.rpi.tw.rds</groupId>
+            <artifactId>rds-api-vocabularies</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
