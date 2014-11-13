@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+       <context:component-scan base-package="edu.rpi.tw.rds.ckan"/>
+
+       <util:properties id="ckanProperties" location="classpath:/ckan.properties"/>
+
+       <bean id="datasetWebServiceTemplate" class="org.springframework.ws.client.core.WebServiceTemplate">
+              <property name="defaultUri" value="#{ckanProperties.base_url}/api/rest/dataset"/>
+              <property name="interceptors">
+                     <list>
+                            <bean class="edu.rpi.tw.rds.ckan.ws.ckan_rest_api.UpdateHeaderIntercepter"/>
+                     </list>
+              </property>
+       </bean>
+
+       <bean id="createResourceWebServiceTemplate" class="org.springframework.ws.client.core.WebServiceTemplate">
+              <property name="defaultUri" value="#{ckanProperties.base_url}/api/3/action/resource_create"/>
+              <property name="interceptors">
+                     <list>
+                            <bean class="edu.rpi.tw.rds.ckan.ws.ckan_v3_api.UpdateHeaderIntercepter"/>
+                     </list>
+              </property>
+       </bean>
+
+       <!-- configure headers with API-KEY ? -->
+
+</beans>
