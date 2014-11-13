@@ -5,10 +5,13 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author szednik
  */
-public class AbstractResource implements Identifiable {
+public abstract class AbstractResource implements Identifiable {
 
     @Id
     private String id;
@@ -23,6 +26,12 @@ public class AbstractResource implements Identifiable {
 
     @Field("label")
     private String label;
+
+    @Field("description")
+    private String description;
+
+    @Field("type")
+    private List<String> types = new ArrayList<>();
 
     public String getId() {
         return id;
@@ -72,5 +81,25 @@ public class AbstractResource implements Identifiable {
 
     public boolean hasLabel() {
         return StringUtils.isNotBlank(this.label);
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public List<String> getTypes() {
+        return types;
+    }
+
+    public void setTypes(List<String> types) {
+        this.types = types;
+    }
+
+    public void addType(String type) {
+        this.types.add(type);
     }
 }

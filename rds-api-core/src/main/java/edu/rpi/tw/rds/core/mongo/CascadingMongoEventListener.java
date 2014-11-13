@@ -1,5 +1,8 @@
 package edu.rpi.tw.rds.core.mongo;
 
+import com.mongodb.DBObject;
+import edu.rpi.tw.rds.core.model.Identifiable;
+import edu.rpi.tw.rds.core.service.IdentityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mapping.model.MappingException;
@@ -18,6 +21,8 @@ public class CascadingMongoEventListener extends AbstractMongoEventListener<Obje
 
     @Autowired
     private MongoOperations mongoOperations;
+
+    private IdentityService identityService;
 
     @Override
     public void onBeforeConvert(final Object source) {
@@ -76,5 +81,24 @@ public class CascadingMongoEventListener extends AbstractMongoEventListener<Obje
         public boolean isIdFound() {
             return idFound;
         }
+    }
+
+    @Override
+    public void onBeforeSave(Object source, DBObject dbo) {
+        super.onBeforeSave(source, dbo);
+        if(identityService != null) {
+            if (Identifiable.class.isAssignableFrom(source.getClass())) {
+                Identifiable obj = (Identifiable) source;
+                identityService.update(obj);
+            }
+        }
+    }
+
+    public IdentityService getIdentityService() {
+        return identityService;
+    }
+
+    public void setIdentityService(IdentityService identityService) {
+        this.identityService = identityService;
     }
 }
