@@ -1,5 +1,7 @@
 package edu.rpi.tw.rds.ckan.service;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.rpi.tw.rds.ckan.model.Resource;
 import edu.rpi.tw.rds.ckan.util.CkanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +12,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Map;
 
 /**
  * @author szednik
@@ -34,10 +43,11 @@ public class ResourceService {
         final String CKAN_CREATE_RESOURCE_URL = CKAN_BASE_URL + "/api/3/action/resource_create";
 
         HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+        requestHeaders.setContentType(MediaType.MULTIPART_FORM_DATA);
         requestHeaders.set("X-CKAN-API-Key", CKAN_API_KEY);
 
-        HttpEntity<Resource> requestEntity = new HttpEntity<>(resource, requestHeaders);
+        MultiValueMap<String, Object> request = buildMultiPartRequest(resource);
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(request, requestHeaders);
 
         ResponseEntity<Resource> responseEntity = restTemplate.postForEntity(CKAN_CREATE_RESOURCE_URL, requestEntity, Resource.class);
 
@@ -53,5 +63,25 @@ public class ResourceService {
         response.setCkanURL(ckan_url);
 
         return response;
+    }
+
+    protected MultiValueMap<String, Object> buildMultiPartRequest(Resource resource) {
+
+        MultiValueMap<String, Object> request = new LinkedMultiValueMap<>();
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        Map<String, Object> jsonMap = mapper.convertValue(resource, Map.class);
+        request.setAll(jsonMap);
+
+        if(resource.hasUploadURL()) {
+            try {
+                request.add("upload", new File(new URI(resource.getUploadURL())));
+            } catch (URISyntaxException e) {
+                // TODO log error
+            }
+        }
+
+        return request;
     }
 }

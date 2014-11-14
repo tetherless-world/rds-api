@@ -10,6 +10,8 @@ import edu.rpi.tw.rds.vocabulary.DCAT;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,7 +88,17 @@ public class ResourceTransformer {
             resource.setURL(accessURL);
         } else if(i.hasProperty(DCAT.downloadURL)) {
             String downloadURL = i.getPropertyResourceValue(DCAT.downloadURL).asResource().getURI();
-            resource.setURL(downloadURL);
+
+            try {
+                if(new URI(downloadURL).getScheme().contains("file")) {
+                    resource.setUploadURL(downloadURL);
+                } else {
+                    resource.setURL(downloadURL);
+                }
+
+            } catch (URISyntaxException e) {
+                // log error
+            }
         }
     }
 }

@@ -1,9 +1,7 @@
 package edu.rpi.tw.rds.ckan.model;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author szednik
@@ -30,6 +28,9 @@ public class Resource extends CkanBase {
 
     @JsonProperty("revision_id")
     private String revisionId;
+
+    @JsonIgnore
+    private String uploadURL;
 
     // methods
 
@@ -79,5 +80,17 @@ public class Resource extends CkanBase {
 
     public void setRevisionId(String revisionId) {
         this.revisionId = revisionId;
+    }
+
+    public String getUploadURL() {
+        return uploadURL;
+    }
+
+    public void setUploadURL(String uploadURL) {
+        this.uploadURL = uploadURL;
+    }
+
+    public boolean hasUploadURL() {
+        return StringUtils.isNotBlank(this.uploadURL);
     }
 }
