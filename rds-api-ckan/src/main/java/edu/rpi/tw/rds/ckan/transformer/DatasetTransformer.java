@@ -1,15 +1,15 @@
 package edu.rpi.tw.rds.ckan.transformer;
 
+import com.hp.hpl.jena.ontology.Individual;
+import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.sparql.vocabulary.FOAF;
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 import com.hp.hpl.jena.vocabulary.RDFS;
-import edu.rpi.tw.rds.vocabulary.DCAT;
-
-import com.hp.hpl.jena.ontology.Individual;
 import edu.rpi.tw.rds.ckan.model.Dataset;
+import edu.rpi.tw.rds.vocabulary.DCAT;
 import edu.rpi.tw.rds.vocabulary.VCARD;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -23,7 +23,15 @@ import java.util.List;
 @Component
 public class DatasetTransformer {
 
-    protected Dataset getDataset(Individual i) {
+    public List<Dataset> transform(OntModel m) {
+        List<Dataset> datasets = new ArrayList<>();
+        for(Individual dataset : m.listIndividuals(DCAT.Dataset).toList()) {
+            datasets.add(getDataset(dataset));
+        }
+        return datasets;
+    }
+
+    public Dataset getDataset(Individual i) {
 
         Assert.notNull(i, "dataset individual must not be null");
         Assert.isTrue(i.hasRDFType(DCAT.Dataset), "individual most have rdf:type dcat:Dataset");
