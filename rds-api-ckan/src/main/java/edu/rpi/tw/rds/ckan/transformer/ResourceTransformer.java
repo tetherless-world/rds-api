@@ -7,6 +7,7 @@ import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
 import edu.rpi.tw.rds.ckan.model.Resource;
 import edu.rpi.tw.rds.vocabulary.DCAT;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.List;
 /**
  * @author szednik
  */
+@Component
 public class ResourceTransformer {
 
     public List<Resource> transform(OntModel m) {

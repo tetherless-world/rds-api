@@ -11,6 +11,7 @@ import com.hp.hpl.jena.vocabulary.RDFS;
 import edu.rpi.tw.rds.ckan.model.Dataset;
 import edu.rpi.tw.rds.vocabulary.DCAT;
 import edu.rpi.tw.rds.vocabulary.VCARD;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -22,6 +23,9 @@ import java.util.List;
  */
 @Component
 public class DatasetTransformer {
+
+    @Autowired
+    private ResourceTransformer resourceTransformer;
 
     public List<Dataset> transform(OntModel m) {
         List<Dataset> datasets = new ArrayList<>();
@@ -48,6 +52,8 @@ public class DatasetTransformer {
         addPublisher(dataset, i);
         addAuthor(dataset, i);
         addContact(dataset, i);
+
+        addResources(dataset, i);
 
         return dataset;
     }
@@ -175,6 +181,16 @@ public class DatasetTransformer {
             } else if(contactPoint.hasProperty(RDFS.label)) {
                 String formattedName = contactPoint.getPropertyResourceValue(RDFS.label).asLiteral().getString();
                 dataset.setMaintainer(formattedName);
+            }
+        }
+    }
+
+    public void addResources(Dataset dataset, Individual i) {
+        if(i.hasProperty(DCAT.distribution)) {
+            for(RDFNode node : i.listPropertyValues(DCAT.distribution).toList()) {
+                Individual distribution = (Individual) node.asResource();
+                edu.rpi.tw.rds.ckan.model.Resource resource = resourceTransformer.getResource(distribution);
+                dataset.addResource(resource);
             }
         }
     }
