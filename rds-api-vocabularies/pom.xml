@@ -31,8 +31,8 @@
                 <executions>
                     <execution>
                         <id>DCAT code generation</id>
-                        <phase>generate-sources</phase>
-                        <!--<phase>none</phase>-->
+                        <!--<phase>generate-sources</phase>-->
+                        <phase>none</phase>
                         <goals>
                             <goal>java</goal>
                         </goals>
@@ -51,8 +51,8 @@
                     </execution>
                     <execution>
                         <id>VIVO code generation</id>
-                        <phase>generate-sources</phase>
-                        <!--<phase>none</phase>-->
+                        <!--<phase>generate-sources</phase>-->
+                        <phase>none</phase>
                         <goals>
                             <goal>java</goal>
                         </goals>
