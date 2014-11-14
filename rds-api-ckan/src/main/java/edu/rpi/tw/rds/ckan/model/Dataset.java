@@ -1,6 +1,7 @@
 package edu.rpi.tw.rds.ckan.model;
 
 import com.fasterxml.jackson.annotation.*;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -136,5 +137,30 @@ public class Dataset extends CkanBase {
 
     public void addResource(Resource resource) {
         this.resources.add(resource);
+    }
+
+    public void setContributors(List<String> contributors) {
+        if(!contributors.isEmpty()) {
+            String contributorsString = StringUtils.join(contributors, "; ");
+            this.addExtra("Contributors", contributorsString);
+        }
+    }
+
+    public void setPublisher(String name) {
+        if(StringUtils.isNotBlank(name)) {
+            this.addExtra("Publisher", name);
+        }
+    }
+
+    public void setLandingPage(String landingPage) {
+        if(StringUtils.isNotBlank(landingPage)) {
+            this.addExtra("landingPage", landingPage);
+        }
+    }
+
+    public void setIssuedDate(String issuedDate) {
+        if(StringUtils.isNotBlank(issuedDate)) {
+            this.addExtra("issuedDate", issuedDate);
+        }
     }
 }
