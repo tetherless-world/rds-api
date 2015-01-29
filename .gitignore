@@ -1,0 +1,11 @@
+# Ignore Maven target directory
+target/
+
+# Ignore compiled Java resources
+*.class
+*.war
+*.jar
+
+# Ignore Intelli-J files
+.idea/
+*.iml
