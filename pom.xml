@@ -22,6 +22,7 @@
     </properties>
 
     <modules>
+        <module>rds-api-vocabularies</module>
         <module>rds-api-core</module>
         <module>rds-api-ckan</module>
         <module>rds-api-vivo</module>
